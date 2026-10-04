@@ -38,12 +38,17 @@ export const ScreenTorchModal: React.FC<ScreenTorchModalProps> = ({
   return (
     <div
       onClick={handleToggleHud}
-      className="fixed inset-0 z-50 flex flex-col justify-between p-6 transition-colors duration-200 select-none cursor-pointer"
-      style={{
-        backgroundColor: kelvinColorHex,
-        opacity: Math.max(0.15, screenBrightness / 100),
-      }}
+      className="fixed inset-0 z-50 flex flex-col justify-between p-6 select-none cursor-pointer bg-black"
     >
+      {/* Dynamic Lantern Light Layer - Smoothly dims with screenBrightness */}
+      <div
+        className="absolute inset-0 transition-opacity duration-150 pointer-events-none"
+        style={{
+          backgroundColor: kelvinColorHex,
+          opacity: Math.max(0.04, screenBrightness / 100),
+        }}
+      />
+
       {/* HUD overlay - click inside stops propagation */}
       <AnimatePresence>
         {isHudVisible && (

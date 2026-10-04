@@ -31,22 +31,23 @@ export const PhotonicCoreButton: React.FC<PhotonicCoreButtonProps> = ({
     onToggle();
   };
 
-  // Calculate dynamic glow and shadow based on brightness and kelvin color
-  const glowOpacity = isOn ? Math.min(1, Math.max(0.3, brightness / 100)) : 0;
-  const glowSpread = isOn ? 30 + (brightness / 100) * 50 : 0;
+  // Dynamic beam intensity factor based on brightness (0.05 to 1.2)
+  const normFactor = Math.max(0.08, Math.min(1.2, brightness / 100));
+  const glowSpread = isOn ? 12 + normFactor * 60 : 0;
 
   return (
     <div className="relative flex flex-col items-center justify-center py-6 select-none">
       {/* Background Volumetric Beam Cone Illusion */}
       <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none transition-all duration-500 rounded-full"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none transition-all duration-300 rounded-full"
         style={{
-          width: isOn ? `${240 + (120 - beamAngle)}px` : '180px',
-          height: isOn ? `${240 + (120 - beamAngle)}px` : '180px',
+          width: isOn ? `${200 + (120 - beamAngle) * (0.3 + normFactor * 0.7)}px` : '180px',
+          height: isOn ? `${200 + (120 - beamAngle) * (0.3 + normFactor * 0.7)}px` : '180px',
           background: isOn
-            ? `radial-gradient(circle, ${kelvinColorHex}${Math.round(glowOpacity * 65).toString(16).padStart(2, '0')} 0%, ${kelvinColorHex}15 45%, transparent 70%)`
+            ? `radial-gradient(circle, ${kelvinColorHex}${Math.round(normFactor * 130).toString(16).padStart(2, '0')} 0%, ${kelvinColorHex}${Math.round(normFactor * 30).toString(16).padStart(2, '0')} 45%, transparent 70%)`
             : 'transparent',
-          filter: `blur(${isOn ? 36 : 10}px)`,
+          filter: `blur(${isOn ? 14 + normFactor * 26 : 10}px)`,
+          opacity: isOn ? normFactor : 0,
         }}
       />
 
@@ -56,14 +57,27 @@ export const PhotonicCoreButton: React.FC<PhotonicCoreButtonProps> = ({
         {isOn && (
           <>
             <motion.div
-              animate={{ scale: [1, 1.25, 1], opacity: [0.6, 0.15, 0.6] }}
+              animate={{
+                scale: [1, 1.25, 1],
+                opacity: [0.65 * normFactor, 0.15 * normFactor, 0.65 * normFactor],
+              }}
               transition={{ repeat: Infinity, duration: isTurbo ? 1.2 : 2.5, ease: 'easeInOut' }}
               className="absolute w-56 h-56 rounded-full border border-amber-300/30 pointer-events-none"
-              style={{ borderColor: `${kelvinColorHex}40` }}
+              style={{
+                borderColor: `${kelvinColorHex}${Math.round(normFactor * 80).toString(16).padStart(2, '0')}`,
+              }}
             />
             <motion.div
-              animate={{ scale: [1, 1.12, 1], opacity: [0.8, 0.3, 0.8] }}
-              transition={{ repeat: Infinity, duration: isTurbo ? 0.9 : 2, ease: 'easeInOut', delay: 0.3 }}
+              animate={{
+                scale: [1, 1.12, 1],
+                opacity: [0.85 * normFactor, 0.25 * normFactor, 0.85 * normFactor],
+              }}
+              transition={{
+                repeat: Infinity,
+                duration: isTurbo ? 0.9 : 2,
+                ease: 'easeInOut',
+                delay: 0.3,
+              }}
               className="absolute w-48 h-48 rounded-full border border-dashed border-white/25 pointer-events-none"
             />
           </>
@@ -83,17 +97,24 @@ export const PhotonicCoreButton: React.FC<PhotonicCoreButtonProps> = ({
           }`}
           style={{
             background: isOn
-              ? `radial-gradient(circle at 35% 30%, #ffffff 0%, ${kelvinColorHex} 40%, #151a28 95%)`
+              ? `radial-gradient(circle at 35% 30%, rgba(255, 255, 255, ${Math.min(1, normFactor * 1.1)}) 0%, ${kelvinColorHex}${Math.round(Math.min(255, normFactor * 255)).toString(16).padStart(2, '0')} 42%, rgba(18, 24, 38, ${0.35 + normFactor * 0.65}) 95%)`
               : 'radial-gradient(circle at 35% 30%, #1c2436 0%, #0d121c 60%, #050811 100%)',
             boxShadow: isOn
-              ? `0 0 ${glowSpread}px ${kelvinColorHex}aa, 0 12px 30px rgba(0,0,0,0.8), inset 0 2px 4px rgba(255,255,255,0.8), inset 0 -6px 12px rgba(0,0,0,0.6)`
+              ? `0 0 ${glowSpread}px ${kelvinColorHex}${Math.round(Math.min(255, normFactor * 220)).toString(16).padStart(2, '0')}, 0 12px 30px rgba(0,0,0,0.8), inset 0 2px 4px rgba(255,255,255,${0.25 + normFactor * 0.75}), inset 0 -6px 12px rgba(0,0,0,0.6)`
               : '0 12px 28px rgba(0,0,0,0.7), inset 0 1px 2px rgba(255,255,255,0.15), inset 0 -4px 8px rgba(0,0,0,0.8)',
+            opacity: isOn ? 0.35 + normFactor * 0.65 : 0.85,
           }}
           aria-label={isOn ? 'Turn torch off' : 'Turn torch on'}
         >
           {/* Specular glass reflections */}
-          <div className="absolute inset-2 rounded-full border border-white/20 pointer-events-none opacity-60" />
-          <div className="absolute top-3 left-6 right-6 h-6 rounded-full bg-gradient-to-b from-white/35 to-transparent pointer-events-none" />
+          <div
+            className="absolute inset-2 rounded-full border border-white/20 pointer-events-none"
+            style={{ opacity: 0.3 + normFactor * 0.5 }}
+          />
+          <div
+            className="absolute top-3 left-6 right-6 h-6 rounded-full bg-gradient-to-b from-white/35 to-transparent pointer-events-none"
+            style={{ opacity: 0.4 + normFactor * 0.6 }}
+          />
 
           {/* Central Icon */}
           <div className="relative flex flex-col items-center justify-center text-center">
@@ -104,13 +125,18 @@ export const PhotonicCoreButton: React.FC<PhotonicCoreButtonProps> = ({
                 transition={{ type: 'spring', stiffness: 400, damping: 20 }}
                 className="flex flex-col items-center"
               >
-                <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center mb-1 text-slate-950 shadow-inner">
+                <div
+                  className="w-12 h-12 rounded-full backdrop-blur-md flex items-center justify-center mb-1 text-slate-950 shadow-inner transition-colors"
+                  style={{
+                    backgroundColor: `rgba(255, 255, 255, ${0.15 + normFactor * 0.35})`,
+                  }}
+                >
                   <Sun className="w-7 h-7 drop-shadow-sm fill-current" />
                 </div>
                 <span className="text-[10px] font-extrabold tracking-widest uppercase text-slate-900 drop-shadow-sm">
                   {isTurbo ? 'TURBO 120%' : 'ACTIVE'}
                 </span>
-                <span className="text-[9px] font-mono-tabular font-bold text-slate-800/80">
+                <span className="text-[9px] font-mono-tabular font-bold text-slate-900/90">
                   {Math.round(brightness)}%
                 </span>
               </motion.div>
@@ -140,7 +166,13 @@ export const PhotonicCoreButton: React.FC<PhotonicCoreButtonProps> = ({
             }`}
           />
           <span className="font-medium text-slate-300">
-            {isOn ? (mode === 'strobe' ? 'STROBE PULSE' : mode === 'sos' ? 'EMERGENCY S.O.S.' : 'PHOTONIC CORE') : 'STANDBY'}
+            {isOn
+              ? mode === 'strobe'
+                ? 'STROBE PULSE'
+                : mode === 'sos'
+                  ? 'EMERGENCY S.O.S.'
+                  : 'PHOTONIC CORE'
+              : 'STANDBY'}
           </span>
         </span>
         <span className="text-slate-600">·</span>

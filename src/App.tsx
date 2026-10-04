@@ -59,8 +59,8 @@ export default function App() {
   const [isAudioBeaconEnabled, setIsAudioBeaconEnabled] = useState<boolean>(true);
   const [showInstallModal, setShowInstallModal] = useState<boolean>(false);
 
-  // Hardware torch state
-  const [isHardwareTorchActive, setIsHardwareTorchActive] = useState<boolean>(false);
+  // Hardware torch state: default to TRUE so torch turns on the real phone LED
+  const [isHardwareTorchActive, setIsHardwareTorchActive] = useState<boolean>(true);
   const [isHardwareSupported, setIsHardwareSupported] = useState<boolean>(false);
 
   // PWA Install & Android WakeLock
@@ -79,14 +79,20 @@ export default function App() {
       if (action === 'torch_on') {
         setIsOn(true);
         audioHaptics.playPowerOn();
+        cameraTorch.initTorch().then((supp) => {
+          setIsHardwareSupported(supp);
+          if (supp) cameraTorch.setTorchState(true);
+        });
       } else if (action === 'strobe') {
         setIsOn(true);
         setTorchMode('strobe');
         audioHaptics.playPowerOn();
+        cameraTorch.initTorch().then((supp) => setIsHardwareSupported(supp));
       } else if (action === 'sos') {
         setIsOn(true);
         setTorchMode('sos');
         audioHaptics.playPowerOn();
+        cameraTorch.initTorch().then((supp) => setIsHardwareSupported(supp));
       } else if (action === 'lantern') {
         setIsScreenLanternOpen(true);
       }
@@ -273,9 +279,24 @@ export default function App() {
     }
   }, [isOn, torchMode, strobeFrequency, isAudioBeaconEnabled]);
 
-  // Master Power Toggle
-  const handleMasterToggle = () => {
-    setIsOn((prev) => !prev);
+  // Master Power Toggle: automatically controls real camera LED flashlight!
+  const handleMasterToggle = async () => {
+    const nextState = !isOn;
+    setIsOn(nextState);
+
+    if (nextState) {
+      audioHaptics.playPowerOn();
+      if (isHardwareTorchActive) {
+        const supported = await cameraTorch.initTorch();
+        setIsHardwareSupported(supported);
+        if (supported) {
+          cameraTorch.setTorchState(true);
+        }
+      }
+    } else {
+      audioHaptics.playPowerOff();
+      cameraTorch.setTorchState(false);
+    }
   };
 
   // Turbo Toggle
@@ -303,12 +324,12 @@ export default function App() {
 
   return (
     <div className="relative min-h-screen w-full bg-[#030712] text-slate-100 flex flex-col items-center justify-start overflow-x-hidden selection:bg-amber-400 selection:text-black">
-      {/* Dynamic Ambient Environmental Light Field */}
+      {/* Dynamic Ambient Environmental Light Field with genuine brightness/opacity response */}
       <div
         className="fixed inset-0 pointer-events-none transition-opacity duration-300"
         style={{
-          opacity: isLightEffectivelyEmitting ? Math.min(0.65, (brightness / 100) * 0.75) : 0,
-          background: `radial-gradient(ellipse at 50% 30%, ${kelvinRgb.hex}30 0%, ${kelvinRgb.hex}08 55%, transparent 80%)`,
+          opacity: isLightEffectivelyEmitting ? Math.max(0.04, (brightness / 100) * 0.85) : 0,
+          background: `radial-gradient(ellipse at 50% 30%, ${kelvinRgb.hex}66 0%, ${kelvinRgb.hex}15 50%, transparent 80%)`,
         }}
       />
 
