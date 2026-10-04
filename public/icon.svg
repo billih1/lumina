@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <defs>
+    <radialGradient id="bgGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#030712" />
+    </radialGradient>
+    <radialGradient id="coreGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="1" />
+      <stop offset="25%" stop-color="#fef08a" stop-opacity="0.95" />
+      <stop offset="55%" stop-color="#f59e0b" stop-opacity="0.8" />
+      <stop offset="85%" stop-color="#d97706" stop-opacity="0.3" />
+      <stop offset="100%" stop-color="#b45309" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="ringGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#3b82f6" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="edgeHighlight" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.6" />
+      <stop offset="50%" stop-color="#fbbf24" stop-opacity="0.2" />
+      <stop offset="100%" stop-color="#1e293b" stop-opacity="0.8" />
+    </linearGradient>
+    <filter id="photonicBlur" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="16" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Deep Obsidian Canvas -->
+  <rect width="512" height="512" rx="112" fill="url(#bgGrad)" stroke="url(#edgeHighlight)" stroke-width="4" />
+
+  <!-- Outer Ambient Field -->
+  <circle cx="256" cy="256" r="210" fill="url(#ringGlow)" filter="url(#photonicBlur)" opacity="0.75" />
+
+  <!-- Tactical Concentric Reticle Rings -->
+  <circle cx="256" cy="256" r="180" stroke="#334155" stroke-width="2" stroke-dasharray="8 6" opacity="0.5" />
+  <circle cx="256" cy="256" r="140" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="2 4" opacity="0.6" />
+  <circle cx="256" cy="256" r="100" stroke="#fbbf24" stroke-width="2.5" opacity="0.8" />
+
+  <!-- Beam Ray Crosshair Markers -->
+  <line x1="256" y1="56" x2="256" y2="88" stroke="#f59e0b" stroke-width="3" stroke-linecap="round" />
+  <line x1="256" y1="424" x2="256" y2="456" stroke="#f59e0b" stroke-width="3" stroke-linecap="round" />
+  <line x1="56" y1="256" x2="88" y2="256" stroke="#f59e0b" stroke-width="3" stroke-linecap="round" />
+  <line x1="424" y1="256" x2="456" y2="256" stroke="#f59e0b" stroke-width="3" stroke-linecap="round" />
+
+  <!-- 45-degree micro notches -->
+  <line x1="115" y1="115" x2="135" y2="135" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" opacity="0.7" />
+  <line x1="397" y1="115" x2="377" y2="135" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" opacity="0.7" />
+  <line x1="115" y1="397" x2="135" y2="377" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" opacity="0.7" />
+  <line x1="397" y1="397" x2="377" y2="377" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" opacity="0.7" />
+
+  <!-- Quantum Core Flare Glow -->
+  <circle cx="256" cy="256" r="80" fill="url(#coreGlow)" />
+
+  <!-- Central High-Intensity Emitter -->
+  <circle cx="256" cy="256" r="38" fill="#ffffff" filter="url(#photonicBlur)" />
+  <circle cx="256" cy="256" r="24" fill="#fffbeb" />
+  
+  <!-- Dynamic Photonic Arc Highlights -->
+  <path d="M 216 256 A 40 40 0 0 1 296 256" stroke="#ffffff" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.9" />
+</svg>

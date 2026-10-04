@@ -1,0 +1,10 @@
+{
+  "name": "Remix Lumina iOS 27 — Photonic Torch",
+  "description": "Next-generation Apple\u0027s iOS 27 torch application featuring quantum photonic beam control, dynamic hyper-island optics, spatial haptics, strobe signaling, and screen illumination.",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

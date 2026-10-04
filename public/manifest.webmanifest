@@ -1,0 +1,63 @@
+{
+  "id": "/",
+  "name": "Lumina iOS 27 — Photonic Torch",
+  "short_name": "Lumina Torch",
+  "description": "Next-generation quantum photonic beam control torch with hardware camera LED flash, strobe, SOS beacon, and spatial haptics.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#030712",
+  "background_color": "#030712",
+  "categories": ["utilities", "tools"],
+  "shortcuts": [
+    {
+      "name": "Turn On Torch",
+      "short_name": "Torch",
+      "description": "Instant full photonic torch emission",
+      "url": "/?action=torch_on",
+      "icons": [{ "src": "/pwa-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Strobe Matrix",
+      "short_name": "Strobe",
+      "description": "Activate tactical strobe signaling",
+      "url": "/?action=strobe",
+      "icons": [{ "src": "/pwa-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "SOS Beacon",
+      "short_name": "SOS",
+      "description": "Broadcast international Morse SOS light signal",
+      "url": "/?action=sos",
+      "icons": [{ "src": "/pwa-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Display Lantern",
+      "short_name": "Lantern",
+      "description": "Full-screen soft lighting lantern",
+      "url": "/?action=lantern",
+      "icons": [{ "src": "/pwa-192x192.png", "sizes": "192x192" }]
+    }
+  ],
+  "icons": [
+    {
+      "src": "/pwa-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-maskable-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
